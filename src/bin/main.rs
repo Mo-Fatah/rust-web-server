@@ -2,10 +2,12 @@ use std::{net::{TcpListener, TcpStream}, io::{Read, Write}, fs, thread, time::Du
 
 use web_server::ThreadPool;
 
+const THREADS_NUMBER: usize = 4;
+
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-    let pool = ThreadPool::new(4);
-    for stream in listener.incoming().take(2) {
+    let pool = ThreadPool::new(THREADS_NUMBER);
+    for stream in listener.incoming() {
         let stream = stream.unwrap();
         pool.execute( || {
             handle_stream(stream);
